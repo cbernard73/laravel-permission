@@ -19,18 +19,25 @@ class AssignRole extends Command
     {
         $modelClass = sprintf("App\%s",ucfirst($this->argument('model_class')));
 
-        if(! method_exists($modelClass,'assignRole'))
+        if(! modelUsesHasRolesTrait($modelClass))
             throw ModelDoesNotSupportRoles::create($modelClass);
 
         $roleClass = app(RoleContract::class);
         
 
-        $role = $roleClass::where('name',$this->argument('name'))->firstOrFail();
+        $role = $roleClass::where('name',$this->argument('name'))->first();
+        if( empty($role))
+            throw RoleDoesNotExist::named($role);
 
         $model = $modelClass::findOrFail($this->argument('model_id'));
 
-        // $model->assignRole($role);
+        $model->assignRole($role);
 
         $this->info("Role `{$role->name}` assigned to `{$modelClass}`.`{$model->id}`");
+    }
+
+    private function modelUsesHasRolesTrait($class)
+    {
+        return method_exists($class,'assignRole');
     }
 }
