@@ -27,7 +27,7 @@ class AssignRole extends Command
         
 
         $role = $roleClass::where('name', $this->argument('name'))->first();
-        if ( empty($role)) {
+        if (empty($role)) {
             throw RoleDoesNotExist::named($role);
         }
 
