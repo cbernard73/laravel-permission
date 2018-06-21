@@ -5,6 +5,7 @@ namespace Spatie\Permission\Commands;
 use Illuminate\Console\Command;
 use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Exceptions\ModelDoesNotSupportRoles;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 
 class AssignRole extends Command
 {
