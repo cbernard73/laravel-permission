@@ -17,17 +17,19 @@ class AssignRole extends Command
 
     public function handle()
     {
-        $modelClass = sprintf("App\%s",ucfirst($this->argument('model_class')));
+        $modelClass = sprintf("App\%s", ucfirst($this->argument('model_class')));
 
-        if(! modelUsesHasRolesTrait($modelClass))
+        if (! $this->modelUsesHasRolesTrait($modelClass)) {
             throw ModelDoesNotSupportRoles::create($modelClass);
+        }
 
         $roleClass = app(RoleContract::class);
         
 
-        $role = $roleClass::where('name',$this->argument('name'))->first();
-        if( empty($role))
+        $role = $roleClass::where('name', $this->argument('name'))->first();
+        if ( empty($role)) {
             throw RoleDoesNotExist::named($role);
+        }
 
         $model = $modelClass::findOrFail($this->argument('model_id'));
 
@@ -38,6 +40,6 @@ class AssignRole extends Command
 
     private function modelUsesHasRolesTrait($class)
     {
-        return method_exists($class,'assignRole');
+        return method_exists($class, 'assignRole');
     }
 }
